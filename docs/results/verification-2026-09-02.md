@@ -24,9 +24,19 @@ Command: `make verify`
 All four experiment objectives passed. The machine-readable result is in
 `latest.json`.
 
+## Public CI verification
+
+- GitHub Actions run
+  [33557699028](https://github.com/jyotirawattech/linux-network-reliability-lab/actions/runs/33557699028)
+  completed successfully for commit `7c07024`.
+- Python 3.11 and Python 3.13 jobs both passed the tests, 80% coverage gate, and
+  deterministic reliability experiment.
+- Each job published a machine-readable reliability-results artifact.
+
 ## Evidence boundary
 
-This is a verified local run. The GitHub Actions workflow is prepared but has not
-run in a public repository. The timing data is localhost evidence, not a
-production SLO or customer outcome. Request rejection occurs at the application
-gateway and must not be described as kernel packet loss.
+The measurements in this record come from the verified local run; public CI
+independently verifies the same acceptance gates in GitHub-hosted Linux runners.
+The timing data is synthetic localhost evidence, not a production SLO or customer
+outcome. Request rejection occurs at the application gateway and must not be
+described as kernel packet loss.

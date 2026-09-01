@@ -43,14 +43,16 @@ These thresholds are lab objectives, not production SLO recommendations.
 - [Leadership and release memo](docs/leadership-memo.md)
 - [Candidate execution plan](docs/candidate-execution-plan.md)
 - [Local verification record](docs/results/verification-2026-09-02.md)
+- [Public CI verification](https://github.com/jyotirawattech/linux-network-reliability-lab/actions/runs/33557699028)
 - [Latest machine-readable result](docs/results/latest.json)
 
 ## Evidence labels
 
-- **Demonstrated:** localhost service, gateway, monitoring state machine, tests,
-  deterministic fault scenarios, and locally measured results.
-- **Prepared:** CI workflow and public release plan until they run in a public
-  repository.
+- **Demonstrated:** localhost service, gateway, monitoring state machine,
+  deterministic fault scenarios, 9 passing tests, 81.4% statement-line
+  coverage, locally measured results, and public CI verification on Python 3.11
+  and 3.13.
+- **Planned:** a separate Linux network-namespace experiment using `tc netem`.
 - **Not claimed:** production reliability improvement, kernel packet-loss behavior,
   Kubernetes operations, customer adoption, or employer outcomes.
 
@@ -61,7 +63,7 @@ src/reliability_lab/       service, fault gateway, monitor and experiment
 tests/                     unit and localhost integration tests
 scripts/                   experiment and dependency-free coverage runners
 docs/                      architecture, decision, leadership and result evidence
-.github/workflows/ci.yml   prepared CI matrix
+.github/workflows/ci.yml   public CI matrix for Python 3.11 and 3.13
 ```
 
 ## Next technical experiment
