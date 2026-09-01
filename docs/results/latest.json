@@ -1,0 +1,33 @@
+{
+  "environment": "localhost; Python standard library; no privileged network access",
+  "experiment": "portable-http-fault-lab",
+  "fault_model": "application-layer request rejection and delay",
+  "limitations": [
+    "Portable mode does not emulate kernel queueing, reordering, corruption, or TCP retransmission.",
+    "Localhost results demonstrate the method and state machine; they are not production SLO evidence.",
+    "Timing varies by host load, so objectives use bounded thresholds rather than exact values."
+  ],
+  "measurements": {
+    "baseline_median_latency_ms": 1.5,
+    "failed_requests": 4,
+    "injected_median_latency_ms": 127.45,
+    "loss_requests": 12,
+    "observed_latency_delta_ms": 125.95,
+    "observed_loss_percent": 33.33,
+    "outage_detection_ms": 56.33,
+    "recovery_detection_ms": 56.51
+  },
+  "monitor": {
+    "failures_to_degrade": 2,
+    "poll_interval_ms": 50,
+    "successes_to_recover": 2,
+    "timeout_ms": 250
+  },
+  "objectives": {
+    "detect_outage_under_300_ms": true,
+    "deterministic_loss_is_exact": true,
+    "inject_at_least_100_ms_latency": true,
+    "recover_under_300_ms": true
+  },
+  "result": "PASS"
+}
