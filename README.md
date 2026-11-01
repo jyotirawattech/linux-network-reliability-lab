@@ -1,78 +1,114 @@
 # Linux Network Reliability Lab
 
-An original, public-safe reliability experiment by Jyoti Rawat. It runs a small
-localhost work service behind a programmable fault gateway, injects delay,
-deterministic request loss, and a service outage, then measures detection and
-recovery through a threshold-based monitor.
+[![CI](https://github.com/jyotirawattech/linux-network-reliability-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/jyotirawattech/linux-network-reliability-lab/actions/workflows/ci.yml)
 
-The project uses synthetic traffic and no employer code, logs, metrics, or
-architecture.
+How quickly does a health monitor notice a failure, and how quickly does it notice
+that service has returned? This small, reproducible lab makes those decisions
+visible with a Python HTTP service, a programmable fault gateway, and a monitor
+that requires consecutive samples before changing state.
 
-## Why this exists
+Run it locally to inject delay, reject every third request, simulate an outage,
+and measure the monitor's response. All traffic is synthetic and stays on
+`127.0.0.1`. The project contains original example code and no employer or customer
+code, architecture, logs, or metrics.
 
-Reliability claims are stronger when another engineer can reproduce the failure,
-inspect the detection policy, and see the measured recovery. This lab keeps that
-proof small enough to review while making limitations explicit.
+## Try the complete experiment
 
-## Run it
-
-Requires Python 3.11+ and `make`; the core path has no third-party dependencies.
+Requires Python 3.11+ and `make`. No third-party Python packages, cloud account,
+containers, or root privileges are needed.
 
 ```bash
+git clone https://github.com/jyotirawattech/linux-network-reliability-lab.git
+cd linux-network-reliability-lab
 make verify
 ```
 
-The command runs unit and localhost integration tests, enforces an 80% statement-
-line coverage floor, executes the fault scenarios, prints the measurements, and
-writes `docs/results/latest.json`.
+The command runs the tests, enforces an 80% statement-line coverage floor, then
+prints a JSON experiment result and writes `docs/results/latest.json`. The
+temporary service and gateway stop when the experiment exits. This is a terminal
+experiment; it does not leave a dashboard or public endpoint running.
 
-## Acceptance objectives
+## What the lab demonstrates
 
-- inject at least 100 ms of observable latency;
-- reject exactly every third request in the deterministic loss scenario;
-- detect a sustained outage within 300 ms;
-- detect recovery within 300 ms;
-- pass the test and coverage gates on Python 3.11 and 3.13 in CI.
+| Scenario | Mechanism | Acceptance check |
+|---|---|---|
+| Delay | Add 120 ms before forwarding seven requests | Added median latency of at least 100 ms |
+| Deterministic request rejection | Return HTTP 503 for every third of 12 requests | Exactly four failed requests |
+| Outage detection | Reject all requests after the monitor is healthy | Transition to `DEGRADED` in under 300 ms |
+| Restoration detection | Restore forwarding after degradation | Transition back to `HEALTHY` in under 300 ms |
 
-These thresholds are lab objectives, not production SLO recommendations.
+The monitor uses a 50 ms pause between samples, a 250 ms probe timeout, two
+consecutive failures to declare degradation, and two consecutive successes to
+declare health. A passing probe resets the failure count, and a failing probe
+resets the success count. The monitor observes the service; the harness clears
+the injected outage. There is no automatic repair or failover in this version.
 
-## Design evidence
+```mermaid
+flowchart LR
+    H[Experiment harness] -->|configure faults| G[HTTP fault gateway]
+    H -->|GET /work| G
+    M[Health monitor] -->|GET /health| G
+    G -->|forward or return 503| S[Work service]
+    M --> R[Transitions and JSON result]
+    H --> R
+```
 
+## Verified results
+
+The [original local record](docs/results/verification-2026-09-02.md) and
+[public CI run for commit 10f369c](https://github.com/jyotirawattech/linux-network-reliability-lab/actions/runs/33557893891)
+provide reproducible evidence. That CI run passed on Python 3.11 and 3.13 and
+published one results artifact per Python version.
+
+A fresh local verification on **1 November 2026**, using **macOS 27.2 and
+Python 3.14.3**, passed all nine tests and the coverage gate:
+
+| Measurement | Observed in that local run |
+|---|---:|
+| Statement-line coverage | 184/226 lines (81.4%) |
+| Baseline median latency | 1.34 ms |
+| Median latency with delay | 126.99 ms |
+| Added median latency | 125.65 ms |
+| Rejected requests | 4/12 (33.33%) |
+| Reported outage detection | 56.01 ms |
+| Reported restoration detection | 56.23 ms |
+
+Timings vary with host load. They describe this synthetic localhost run, rather
+than a production SLO or a Linux kernel packet-loss test. Transition timings use
+the start timestamp of the qualifying probe; see the
+[walkthrough](docs/walkthrough.md#interpret-the-timing-carefully) for the exact
+measurement boundary.
+
+## Read the engineering decisions
+
+- [Walkthrough: run, inspect, and troubleshoot the experiment](docs/walkthrough.md)
 - [Architecture and failure flow](docs/architecture.md)
-- [ADR 0001: portable deterministic faults](docs/adr/0001-portable-deterministic-faults.md)
-- [Leadership and release memo](docs/leadership-memo.md)
+- [ADR 0001: why portable deterministic faults](docs/adr/0001-portable-deterministic-faults.md)
+- [Leadership memo: priorities, trade-offs, and release plan](docs/leadership-memo.md)
+- [Tests and acceptance checks](tests/test_lab.py)
 - [Candidate execution plan](docs/candidate-execution-plan.md)
-- [Local verification record](docs/results/verification-2026-09-02.md)
-- [Public CI verification](https://github.com/jyotirawattech/linux-network-reliability-lab/actions/runs/33557699028)
-- [Latest machine-readable result](docs/results/latest.json)
 
-## Evidence labels
+## Scope and next experiment
 
-- **Demonstrated:** localhost service, gateway, monitoring state machine,
-  deterministic fault scenarios, 9 passing tests, 81.4% statement-line
-  coverage, locally measured results, and public CI verification on Python 3.11
-  and 3.13.
-- **Planned:** a separate Linux network-namespace experiment using `tc netem`.
-- **Not claimed:** production reliability improvement, kernel packet-loss behavior,
-  Kubernetes operations, customer adoption, or employer outcomes.
+The gateway's `loss` mode returns HTTP 503. It does not drop network packets or
+model TCP retransmission, kernel queueing, corruption, reordering, or distributed
+failure. The nine tests and the custom statement-line coverage metric also do
+not establish branch coverage, load capacity, or production availability.
+
+A future Linux experiment can place the service in a network namespace, apply
+`tc netem`, and compare kernel-level delay/loss with this gateway model. That
+extension is planned, not implemented here.
 
 ## Repository map
 
 ```text
-src/reliability_lab/       service, fault gateway, monitor and experiment
-tests/                     unit and localhost integration tests
-scripts/                   experiment and dependency-free coverage runners
-docs/                      architecture, decision, leadership and result evidence
-.github/workflows/ci.yml   public CI matrix for Python 3.11 and 3.13
+src/reliability_lab/       service, fault gateway, monitor, experiment
+tests/                     nine unit and localhost integration tests
+scripts/                   experiment and statement-line coverage runners
+docs/                      walkthrough, architecture, decisions, evidence
+.github/workflows/ci.yml   Linux CI matrix for Python 3.11 and 3.13
 ```
-
-## Next technical experiment
-
-Run the same monitor against a Linux network namespace with `tc netem`, compare
-kernel-level loss and delay against the portable gateway model, and document where
-the observations diverge. That work should be released as a separate result so it
-does not blur the v0.1 evidence boundary.
 
 ## License
 
-MIT.
+[MIT](LICENSE).
