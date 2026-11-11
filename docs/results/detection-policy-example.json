@@ -1,0 +1,516 @@
+{
+  "baseline": "one failure to degrade / one success to recover (1/1)",
+  "benchmark": {
+    "measured_speedup": null,
+    "paired_wall_clock": "not_run"
+  },
+  "cases": [
+    {
+      "name": "isolated_probe_glitches",
+      "policies": [
+        {
+          "failures_to_degrade": 1,
+          "noise_degradations": 2,
+          "outages": [],
+          "sample_count": 6,
+          "successes_to_recover": 1,
+          "transition_count": 4,
+          "transitions": [
+            {
+              "at_ms": 50,
+              "current": "DEGRADED",
+              "previous": "HEALTHY"
+            },
+            {
+              "at_ms": 100,
+              "current": "HEALTHY",
+              "previous": "DEGRADED"
+            },
+            {
+              "at_ms": 200,
+              "current": "DEGRADED",
+              "previous": "HEALTHY"
+            },
+            {
+              "at_ms": 250,
+              "current": "HEALTHY",
+              "previous": "DEGRADED"
+            }
+          ]
+        },
+        {
+          "failures_to_degrade": 2,
+          "noise_degradations": 0,
+          "outages": [],
+          "sample_count": 6,
+          "successes_to_recover": 2,
+          "transition_count": 0,
+          "transitions": []
+        },
+        {
+          "failures_to_degrade": 3,
+          "noise_degradations": 0,
+          "outages": [],
+          "sample_count": 6,
+          "successes_to_recover": 3,
+          "transition_count": 0,
+          "transitions": []
+        }
+      ],
+      "samples": [
+        {
+          "at_ms": 0,
+          "probe_ok": true,
+          "service_unavailable": false
+        },
+        {
+          "at_ms": 50,
+          "probe_ok": false,
+          "service_unavailable": false
+        },
+        {
+          "at_ms": 100,
+          "probe_ok": true,
+          "service_unavailable": false
+        },
+        {
+          "at_ms": 150,
+          "probe_ok": true,
+          "service_unavailable": false
+        },
+        {
+          "at_ms": 200,
+          "probe_ok": false,
+          "service_unavailable": false
+        },
+        {
+          "at_ms": 250,
+          "probe_ok": true,
+          "service_unavailable": false
+        }
+      ]
+    },
+    {
+      "name": "sustained_outage",
+      "policies": [
+        {
+          "failures_to_degrade": 1,
+          "noise_degradations": 0,
+          "outages": [
+            {
+              "detection_delay_ms": 0,
+              "detection_status": "detected",
+              "outage_samples": 4,
+              "recovery_delay_ms": 0,
+              "recovery_status": "recovered",
+              "restoration_ms": 300,
+              "start_ms": 100
+            }
+          ],
+          "sample_count": 10,
+          "successes_to_recover": 1,
+          "transition_count": 2,
+          "transitions": [
+            {
+              "at_ms": 100,
+              "current": "DEGRADED",
+              "previous": "HEALTHY"
+            },
+            {
+              "at_ms": 300,
+              "current": "HEALTHY",
+              "previous": "DEGRADED"
+            }
+          ]
+        },
+        {
+          "failures_to_degrade": 2,
+          "noise_degradations": 0,
+          "outages": [
+            {
+              "detection_delay_ms": 50,
+              "detection_status": "detected",
+              "outage_samples": 4,
+              "recovery_delay_ms": 50,
+              "recovery_status": "recovered",
+              "restoration_ms": 300,
+              "start_ms": 100
+            }
+          ],
+          "sample_count": 10,
+          "successes_to_recover": 2,
+          "transition_count": 2,
+          "transitions": [
+            {
+              "at_ms": 150,
+              "current": "DEGRADED",
+              "previous": "HEALTHY"
+            },
+            {
+              "at_ms": 350,
+              "current": "HEALTHY",
+              "previous": "DEGRADED"
+            }
+          ]
+        },
+        {
+          "failures_to_degrade": 3,
+          "noise_degradations": 0,
+          "outages": [
+            {
+              "detection_delay_ms": 100,
+              "detection_status": "detected",
+              "outage_samples": 4,
+              "recovery_delay_ms": 100,
+              "recovery_status": "recovered",
+              "restoration_ms": 300,
+              "start_ms": 100
+            }
+          ],
+          "sample_count": 10,
+          "successes_to_recover": 3,
+          "transition_count": 2,
+          "transitions": [
+            {
+              "at_ms": 200,
+              "current": "DEGRADED",
+              "previous": "HEALTHY"
+            },
+            {
+              "at_ms": 400,
+              "current": "HEALTHY",
+              "previous": "DEGRADED"
+            }
+          ]
+        }
+      ],
+      "samples": [
+        {
+          "at_ms": 0,
+          "probe_ok": true,
+          "service_unavailable": false
+        },
+        {
+          "at_ms": 50,
+          "probe_ok": true,
+          "service_unavailable": false
+        },
+        {
+          "at_ms": 100,
+          "probe_ok": false,
+          "service_unavailable": true
+        },
+        {
+          "at_ms": 150,
+          "probe_ok": false,
+          "service_unavailable": true
+        },
+        {
+          "at_ms": 200,
+          "probe_ok": false,
+          "service_unavailable": true
+        },
+        {
+          "at_ms": 250,
+          "probe_ok": false,
+          "service_unavailable": true
+        },
+        {
+          "at_ms": 300,
+          "probe_ok": true,
+          "service_unavailable": false
+        },
+        {
+          "at_ms": 350,
+          "probe_ok": true,
+          "service_unavailable": false
+        },
+        {
+          "at_ms": 400,
+          "probe_ok": true,
+          "service_unavailable": false
+        },
+        {
+          "at_ms": 450,
+          "probe_ok": true,
+          "service_unavailable": false
+        }
+      ]
+    },
+    {
+      "name": "one_sample_outage",
+      "policies": [
+        {
+          "failures_to_degrade": 1,
+          "noise_degradations": 0,
+          "outages": [
+            {
+              "detection_delay_ms": 0,
+              "detection_status": "detected",
+              "outage_samples": 1,
+              "recovery_delay_ms": 0,
+              "recovery_status": "recovered",
+              "restoration_ms": 150,
+              "start_ms": 100
+            }
+          ],
+          "sample_count": 7,
+          "successes_to_recover": 1,
+          "transition_count": 2,
+          "transitions": [
+            {
+              "at_ms": 100,
+              "current": "DEGRADED",
+              "previous": "HEALTHY"
+            },
+            {
+              "at_ms": 150,
+              "current": "HEALTHY",
+              "previous": "DEGRADED"
+            }
+          ]
+        },
+        {
+          "failures_to_degrade": 2,
+          "noise_degradations": 0,
+          "outages": [
+            {
+              "detection_delay_ms": null,
+              "detection_status": "not_detected",
+              "outage_samples": 1,
+              "recovery_delay_ms": null,
+              "recovery_status": "not_needed",
+              "restoration_ms": 150,
+              "start_ms": 100
+            }
+          ],
+          "sample_count": 7,
+          "successes_to_recover": 2,
+          "transition_count": 0,
+          "transitions": []
+        },
+        {
+          "failures_to_degrade": 3,
+          "noise_degradations": 0,
+          "outages": [
+            {
+              "detection_delay_ms": null,
+              "detection_status": "not_detected",
+              "outage_samples": 1,
+              "recovery_delay_ms": null,
+              "recovery_status": "not_needed",
+              "restoration_ms": 150,
+              "start_ms": 100
+            }
+          ],
+          "sample_count": 7,
+          "successes_to_recover": 3,
+          "transition_count": 0,
+          "transitions": []
+        }
+      ],
+      "samples": [
+        {
+          "at_ms": 0,
+          "probe_ok": true,
+          "service_unavailable": false
+        },
+        {
+          "at_ms": 50,
+          "probe_ok": true,
+          "service_unavailable": false
+        },
+        {
+          "at_ms": 100,
+          "probe_ok": false,
+          "service_unavailable": true
+        },
+        {
+          "at_ms": 150,
+          "probe_ok": true,
+          "service_unavailable": false
+        },
+        {
+          "at_ms": 200,
+          "probe_ok": true,
+          "service_unavailable": false
+        },
+        {
+          "at_ms": 250,
+          "probe_ok": true,
+          "service_unavailable": false
+        },
+        {
+          "at_ms": 300,
+          "probe_ok": true,
+          "service_unavailable": false
+        }
+      ]
+    },
+    {
+      "name": "noisy_restoration",
+      "policies": [
+        {
+          "failures_to_degrade": 1,
+          "noise_degradations": 1,
+          "outages": [
+            {
+              "detection_delay_ms": 0,
+              "detection_status": "detected",
+              "outage_samples": 4,
+              "recovery_delay_ms": 0,
+              "recovery_status": "recovered",
+              "restoration_ms": 300,
+              "start_ms": 100
+            }
+          ],
+          "sample_count": 11,
+          "successes_to_recover": 1,
+          "transition_count": 4,
+          "transitions": [
+            {
+              "at_ms": 100,
+              "current": "DEGRADED",
+              "previous": "HEALTHY"
+            },
+            {
+              "at_ms": 300,
+              "current": "HEALTHY",
+              "previous": "DEGRADED"
+            },
+            {
+              "at_ms": 350,
+              "current": "DEGRADED",
+              "previous": "HEALTHY"
+            },
+            {
+              "at_ms": 400,
+              "current": "HEALTHY",
+              "previous": "DEGRADED"
+            }
+          ]
+        },
+        {
+          "failures_to_degrade": 2,
+          "noise_degradations": 0,
+          "outages": [
+            {
+              "detection_delay_ms": 50,
+              "detection_status": "detected",
+              "outage_samples": 4,
+              "recovery_delay_ms": 150,
+              "recovery_status": "recovered",
+              "restoration_ms": 300,
+              "start_ms": 100
+            }
+          ],
+          "sample_count": 11,
+          "successes_to_recover": 2,
+          "transition_count": 2,
+          "transitions": [
+            {
+              "at_ms": 150,
+              "current": "DEGRADED",
+              "previous": "HEALTHY"
+            },
+            {
+              "at_ms": 450,
+              "current": "HEALTHY",
+              "previous": "DEGRADED"
+            }
+          ]
+        },
+        {
+          "failures_to_degrade": 3,
+          "noise_degradations": 0,
+          "outages": [
+            {
+              "detection_delay_ms": 100,
+              "detection_status": "detected",
+              "outage_samples": 4,
+              "recovery_delay_ms": 200,
+              "recovery_status": "recovered",
+              "restoration_ms": 300,
+              "start_ms": 100
+            }
+          ],
+          "sample_count": 11,
+          "successes_to_recover": 3,
+          "transition_count": 2,
+          "transitions": [
+            {
+              "at_ms": 200,
+              "current": "DEGRADED",
+              "previous": "HEALTHY"
+            },
+            {
+              "at_ms": 500,
+              "current": "HEALTHY",
+              "previous": "DEGRADED"
+            }
+          ]
+        }
+      ],
+      "samples": [
+        {
+          "at_ms": 0,
+          "probe_ok": true,
+          "service_unavailable": false
+        },
+        {
+          "at_ms": 50,
+          "probe_ok": true,
+          "service_unavailable": false
+        },
+        {
+          "at_ms": 100,
+          "probe_ok": false,
+          "service_unavailable": true
+        },
+        {
+          "at_ms": 150,
+          "probe_ok": false,
+          "service_unavailable": true
+        },
+        {
+          "at_ms": 200,
+          "probe_ok": false,
+          "service_unavailable": true
+        },
+        {
+          "at_ms": 250,
+          "probe_ok": false,
+          "service_unavailable": true
+        },
+        {
+          "at_ms": 300,
+          "probe_ok": true,
+          "service_unavailable": false
+        },
+        {
+          "at_ms": 350,
+          "probe_ok": false,
+          "service_unavailable": false
+        },
+        {
+          "at_ms": 400,
+          "probe_ok": true,
+          "service_unavailable": false
+        },
+        {
+          "at_ms": 450,
+          "probe_ok": true,
+          "service_unavailable": false
+        },
+        {
+          "at_ms": 500,
+          "probe_ok": true,
+          "service_unavailable": false
+        }
+      ]
+    }
+  ],
+  "evidence_type": "deterministic_synthetic_sample_time_model",
+  "sample_interval_ms": 50,
+  "warmup": "each policy starts HEALTHY; warmup is excluded from reported transitions"
+}

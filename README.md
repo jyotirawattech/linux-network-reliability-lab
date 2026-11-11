@@ -118,6 +118,17 @@ measurement boundary.
 - [Tests and acceptance checks](tests/test_lab.py)
 - [Candidate execution plan](docs/candidate-execution-plan.md)
 
+## Compare alert noise against detection delay
+
+Run `make compare-policies` for an offline experiment using the actual monitor on
+identical synthetic observations. A 1/1 threshold policy produces two noise-induced
+degradation events on the isolated-glitch trace; 2/2 and 3/3 produce none. Their cost is
+50 ms and 100 ms of additional detection delay on the supplied 50 ms grid, and neither
+detects the one-sample outage. These are deterministic **sample-time model**
+results, not wall-clock measurements or production recommendations.
+
+[Inspect the inputs, worked JSON and trade-offs](docs/experiments/detection-policy-tradeoffs.md).
+
 ## Scope and next experiment
 
 The gateway's `loss` mode returns HTTP 503. It does not drop network packets or
