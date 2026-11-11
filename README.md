@@ -12,6 +12,36 @@ and measure the monitor's response. All traffic is synthetic and stays on
 `127.0.0.1`. The project contains original example code and no employer or customer
 code, architecture, logs, or metrics.
 
+## One result you can reproduce
+
+In the **7 November 2026 local run**, rejecting every third request produced
+**4 HTTP 503 responses out of 12 requests**. Switching to an outage and then
+restoring forwarding produced reported state-change timings of **54.13 ms**
+to `DEGRADED` and **54.59 ms** back to `HEALTHY`.
+
+Run `make verify` from the repository root. Its JSON output includes the same
+fields as this excerpt from that run; exact timing values vary by host load:
+
+```json
+{
+  "measurements": {
+    "failed_requests": 4,
+    "loss_requests": 12,
+    "outage_detection_ms": 54.13,
+    "recovery_detection_ms": 54.59
+  },
+  "result": "PASS"
+}
+```
+
+[Inspect the dated run, full output and acceptance checks](docs/results/verification-2026-11-07.md).
+The monitor requires two consecutive failures or successes, so an isolated
+sample does not change a healthy/degraded state. These are **detection** timings:
+the harness restores forwarding; the monitor does not repair the service.
+The reported timestamp is the start of the qualifying probe, not the time its
+response completes. HTTP 503 rejection is application-layer behavior, not kernel
+packet loss.
+
 ## Try the complete experiment
 
 Requires Python 3.11+ and `make`. No third-party Python packages, cloud account,
