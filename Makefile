@@ -1,4 +1,4 @@
-.PHONY: test coverage experiment compare-policies verify
+.PHONY: test coverage experiment compare-policies compare-delivery verify
 
 test:
 	PYTHONPATH=src python3 -m unittest discover -s tests -v
@@ -12,4 +12,7 @@ experiment:
 compare-policies:
 	PYTHONPATH=src python3 scripts/compare_policies.py
 
-verify: test coverage experiment compare-policies
+compare-delivery:
+	@PYTHONPATH=src python3 -m reliability_lab.delivery_experiment
+
+verify: test coverage experiment compare-policies compare-delivery

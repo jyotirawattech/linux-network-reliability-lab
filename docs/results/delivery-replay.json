@@ -1,0 +1,318 @@
+{
+  "clean": {
+    "ack_first": {
+      "attempts": 1,
+      "effects": 1,
+      "duplicate_effects": 0,
+      "suppressed_effects": 0,
+      "settled": true,
+      "trace": [
+        {
+          "fault": "clean",
+          "events": [
+            "ack_settled",
+            "effect_applied"
+          ]
+        }
+      ]
+    },
+    "ack_last": {
+      "attempts": 1,
+      "effects": 1,
+      "duplicate_effects": 0,
+      "suppressed_effects": 0,
+      "settled": true,
+      "trace": [
+        {
+          "fault": "clean",
+          "events": [
+            "effect_applied",
+            "ack_settled"
+          ]
+        }
+      ]
+    },
+    "atomic_marker": {
+      "attempts": 1,
+      "effects": 1,
+      "duplicate_effects": 0,
+      "suppressed_effects": 0,
+      "settled": true,
+      "trace": [
+        {
+          "fault": "clean",
+          "events": [
+            "effect_applied",
+            "ack_settled"
+          ]
+        }
+      ]
+    }
+  },
+  "crash_before_effect": {
+    "ack_first": {
+      "attempts": 1,
+      "effects": 0,
+      "duplicate_effects": 0,
+      "suppressed_effects": 0,
+      "settled": true,
+      "trace": [
+        {
+          "fault": "before_effect",
+          "events": [
+            "ack_settled",
+            "crash_before_effect"
+          ]
+        }
+      ]
+    },
+    "ack_last": {
+      "attempts": 2,
+      "effects": 1,
+      "duplicate_effects": 0,
+      "suppressed_effects": 0,
+      "settled": true,
+      "trace": [
+        {
+          "fault": "before_effect",
+          "events": [
+            "crash_before_effect"
+          ]
+        },
+        {
+          "fault": "clean",
+          "events": [
+            "effect_applied",
+            "ack_settled"
+          ]
+        }
+      ]
+    },
+    "atomic_marker": {
+      "attempts": 2,
+      "effects": 1,
+      "duplicate_effects": 0,
+      "suppressed_effects": 0,
+      "settled": true,
+      "trace": [
+        {
+          "fault": "before_effect",
+          "events": [
+            "crash_before_effect"
+          ]
+        },
+        {
+          "fault": "clean",
+          "events": [
+            "effect_applied",
+            "ack_settled"
+          ]
+        }
+      ]
+    }
+  },
+  "crash_after_effect": {
+    "ack_first": {
+      "attempts": 1,
+      "effects": 1,
+      "duplicate_effects": 0,
+      "suppressed_effects": 0,
+      "settled": true,
+      "trace": [
+        {
+          "fault": "after_effect",
+          "events": [
+            "ack_settled",
+            "effect_applied",
+            "crash_after_effect"
+          ]
+        }
+      ]
+    },
+    "ack_last": {
+      "attempts": 2,
+      "effects": 2,
+      "duplicate_effects": 1,
+      "suppressed_effects": 0,
+      "settled": true,
+      "trace": [
+        {
+          "fault": "after_effect",
+          "events": [
+            "effect_applied",
+            "crash_after_effect"
+          ]
+        },
+        {
+          "fault": "clean",
+          "events": [
+            "effect_applied",
+            "ack_settled"
+          ]
+        }
+      ]
+    },
+    "atomic_marker": {
+      "attempts": 2,
+      "effects": 1,
+      "duplicate_effects": 0,
+      "suppressed_effects": 1,
+      "settled": true,
+      "trace": [
+        {
+          "fault": "after_effect",
+          "events": [
+            "effect_applied",
+            "crash_after_effect"
+          ]
+        },
+        {
+          "fault": "clean",
+          "events": [
+            "effect_suppressed",
+            "ack_settled"
+          ]
+        }
+      ]
+    }
+  },
+  "lost_ack": {
+    "ack_first": {
+      "attempts": 2,
+      "effects": 1,
+      "duplicate_effects": 0,
+      "suppressed_effects": 0,
+      "settled": true,
+      "trace": [
+        {
+          "fault": "ack_lost",
+          "events": [
+            "ack_lost"
+          ]
+        },
+        {
+          "fault": "clean",
+          "events": [
+            "ack_settled",
+            "effect_applied"
+          ]
+        }
+      ]
+    },
+    "ack_last": {
+      "attempts": 2,
+      "effects": 2,
+      "duplicate_effects": 1,
+      "suppressed_effects": 0,
+      "settled": true,
+      "trace": [
+        {
+          "fault": "ack_lost",
+          "events": [
+            "effect_applied",
+            "ack_lost"
+          ]
+        },
+        {
+          "fault": "clean",
+          "events": [
+            "effect_applied",
+            "ack_settled"
+          ]
+        }
+      ]
+    },
+    "atomic_marker": {
+      "attempts": 2,
+      "effects": 1,
+      "duplicate_effects": 0,
+      "suppressed_effects": 1,
+      "settled": true,
+      "trace": [
+        {
+          "fault": "ack_lost",
+          "events": [
+            "effect_applied",
+            "ack_lost"
+          ]
+        },
+        {
+          "fault": "clean",
+          "events": [
+            "effect_suppressed",
+            "ack_settled"
+          ]
+        }
+      ]
+    }
+  },
+  "budget_exhausted": {
+    "ack_first": {
+      "attempts": 2,
+      "effects": 0,
+      "duplicate_effects": 0,
+      "suppressed_effects": 0,
+      "settled": false,
+      "trace": [
+        {
+          "fault": "ack_lost",
+          "events": [
+            "ack_lost"
+          ]
+        },
+        {
+          "fault": "ack_lost",
+          "events": [
+            "ack_lost"
+          ]
+        }
+      ]
+    },
+    "ack_last": {
+      "attempts": 2,
+      "effects": 2,
+      "duplicate_effects": 1,
+      "suppressed_effects": 0,
+      "settled": false,
+      "trace": [
+        {
+          "fault": "ack_lost",
+          "events": [
+            "effect_applied",
+            "ack_lost"
+          ]
+        },
+        {
+          "fault": "ack_lost",
+          "events": [
+            "effect_applied",
+            "ack_lost"
+          ]
+        }
+      ]
+    },
+    "atomic_marker": {
+      "attempts": 2,
+      "effects": 1,
+      "duplicate_effects": 0,
+      "suppressed_effects": 1,
+      "settled": false,
+      "trace": [
+        {
+          "fault": "ack_lost",
+          "events": [
+            "effect_applied",
+            "ack_lost"
+          ]
+        },
+        {
+          "fault": "ack_lost",
+          "events": [
+            "effect_suppressed",
+            "ack_lost"
+          ]
+        }
+      ]
+    }
+  }
+}

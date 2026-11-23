@@ -129,6 +129,15 @@ results, not wall-clock measurements or production recommendations.
 
 [Inspect the inputs, worked JSON and trade-offs](docs/experiments/detection-policy-tradeoffs.md).
 
+## Compare acknowledgement policies
+
+Run `make compare-delivery` to replay one synthetic message through an early
+ack, a late ack, and a late ack with an atomic effect and marker. In the
+lost-ack case, the marker reduces two effects to one across the same two
+attempts. The early-ack case can lose work when processing crashes after
+settlement. The [worked traces and assumptions](docs/experiments/delivery-acknowledgement.md)
+show exactly where those outcomes come from.
+
 ## Scope and next experiment
 
 The gateway's `loss` mode returns HTTP 503. It does not drop network packets or
